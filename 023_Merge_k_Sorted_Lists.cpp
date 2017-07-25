@@ -40,3 +40,32 @@ public:
         return p2->next;
     }
 };
+
+// 最优解　O(nlogk)
+struct compare
+{
+    bool operator()(const ListNode* lhs, const ListNode* rhs)   { return lhs->val > rhs->val; }
+};
+class Solution {
+public:   
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if (lists.empty())  return 0;
+        priority_queue<ListNode*, vector<ListNode*>, compare> q;
+        for (auto l : lists)    
+            if (l)  q.push(l);
+        if (q.empty())   return 0;
+        ListNode* ret = q.top();
+        ListNode* p = ret;
+        q.pop();
+        if (p->next)  q.push(p->next);
+        while (!q.empty())
+        {
+            p->next = q.top();
+            p = p->next;
+            q.pop();
+            if (p->next)  q.push(p->next);
+        }
+        return ret;
+    }
+};
+
